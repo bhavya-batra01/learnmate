@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnMate | About</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: url('background.jpeg') no-repeat center/cover;
+}
+
+/* HEADER */
+
+header {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+
+header img {
+    width: 70px;
+    height: 70px;
+}
+
+header h1 {
+    color:  #5D45A0;
+    font-size: 70px;
+}
+a{
+    text-decoration: none;
+    color:  #5D45A0;
+}
+
+header ul {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #5D45A0;
+}
+
+header button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(to right, #9b7fea, #7c5edc);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* MAIN */
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px;
+    gap: 60px;
+}
+
+.ab-left img {
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid #7c5edc;
+}
+
+.left {
+    padding: 20px;
+    max-width: 500px;
+    box-shadow: 0 15px 35px rgba(160,130,220,0.25);
+    background-color: rgba(251, 248, 255, 0.1);
+}
+
+.left h1 {
+    color: #5D45A0;
+    margin-bottom: 15px;
+}
+
+.left p {
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.left ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.left li {
+    margin-bottom: 8px;
+}
+
+.left h2 {
+    color: #7c5edc;
+}
+
+/* FOOTER */
+footer {
+    background: linear-gradient(to right, #9b7fea, #7c5edc);
+    padding: 25px;
+    color: white;
+    text-align: center;
+}
+
+.inline {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+}
+.left h3{
+    text-align: right;
+    color:#7c5edc;
+}
+</style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="logo">
+        <h1>LearnMate</h1>
+        <ul>
+            <a href="home.html"> <li>Home</li></a>
+            <a href="working.html">  <li>How It Works</li></a>
+            <a href="about.html"> <li>About</li></a>
+            <a href="buddies.html"> <li>Saved Buddies</li></a>
+          <a href="login.html"> <li><button>Login</button></li></a>
+          <a href="signup.html"> <li><button>Signup</button></li></a>
+        </ul>
+    </header>
+
+    <main>
+        <div class="ab-left">
+            <img src="home.png" alt="home" >
+        </div>
+        <div class="left">
+            <h1>About LearnMate</h1>
+            <p>LearnMate is a platform designed to help students connect with like-minded peers for collaborative learning. Whether you want to prepare for exams, discuss assignments, or join study sessions, LearnMate makes it easy and fun.</p>
+        <ul>
+            <li>Find study buddies that match your interests and courses</li>
+            <li>Plan and schedule study sessions easily</li>
+            <li>Track your progress and achieve academic goals together</li>
+            <li>Chat and share resources in a safe and friendly environment</li>
+        </ul>
+        <h3>Developed by BB</h3>
+        </div>
+    </main>
+
+        <footer>
+        <h2>Study Smarter,Together</h2>
+         <i class="fas fa-hand-point-right"></i>
+         <div class="inline">
+        <h3>Swipe and Match</h3>
+        <h3><i class="fa fa-wechat"></i> chat And Plan Sessions</h3>
+        <h3><i class="fas fa-bullseye" aria-hidden="true"></i> Achieve Goals</h3>
+        </div>
+    </footer>
+
+</body>
+</html>

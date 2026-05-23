@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LearnMate | Buddies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+ --primary:#8b6fe8;
+ --secondary:#6f5bd7;
+ --bg:#efe9ff;
+ --card:#ffffff;
+ --text:#3b2f63;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background-image: url('background.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-y: auto;
+}
+
+header {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+
+header img {
+    width: 70px;
+    height: 70px;
+}
+
+header h1 {
+    color:  #5D45A0;
+    font-size: 70px;
+}
+a{
+    text-decoration: none;
+    color:  #5D45A0;
+}
+
+header ul {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #5D45A0;
+}
+
+header button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(to right, #9b7fea, #7c5edc);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+li:hover{
+    text-decoration: underline;
+    font-size: larger;
+    transition: ease-in 0.3s;
+}
+
+button{
+ background:linear-gradient(135deg,var(--primary),var(--secondary));
+ border:none;
+ color:white;
+ padding:8px 16px;
+ border-radius:14px;
+ cursor:pointer;
+}
+button.small{padding:6px 12px;font-size:13px}
+.container{
+ max-width:1200px;
+ margin:30px auto;
+ display:grid;
+ grid-template-columns:240px 1fr;
+ gap:30px;
+ padding:0 20px;
+}
+aside{
+ background:rgba(155,127,234,.4);
+ padding:20px;
+ border-radius:20px;
+}
+aside li{
+ list-style:none;
+ padding:14px;
+ border-radius:14px;
+ cursor:pointer;
+ margin-bottom:6px;
+}
+aside li.active{background:white}
+.section{display:none}
+.section.active{display:block}
+.card{
+ background:white;
+ padding:22px;
+ border-radius:22px;
+ margin-bottom:22px;
+ box-shadow:0 14px 35px rgba(0,0,0,.12);
+}
+.user{
+ display:flex;
+ align-items:center;
+ gap:16px;
+}
+.user img{
+ width:70px;
+ height:70px;
+ border-radius:18px;
+ object-fit:cover;
+ background:#ddd;
+}
+.badge{
+ margin-left:auto;
+ width:60px;
+ height:60px;
+ border-radius:50%;
+ border:6px solid var(--primary);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:600;
+}
+.match{
+ font-size:13px;
+ padding:6px 12px;
+ border-radius:20px;
+ background:#efe9ff;
+}
+.empty{text-align:center;opacity:.6}
+/* CHAT */
+.chatBox{
+ height:200px;
+ overflow-y:auto;
+ border:1px solid #ddd;
+ border-radius:14px;
+ padding:10px;
+ margin-bottom:10px;
+}
+.msg.me{text-align:right}
+.msg.them{text-align:left}
+.msg span{
+ display:inline-block;
+ background:#efe9ff;
+ padding:6px 10px;
+ border-radius:14px;
+ margin:4px 0;
+ max-width:80%;
+}
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{background:#f3edff;padding:12px}
+td{padding:10px;text-align:center}
+tr:nth-child(even){background:#faf8ff}
+/* STATUS */
+.status{padding:6px 12px;border-radius:20px;color:white}
+.pending{background:#f0ad4e}
+.accepted{background:#5cb85c}
+.rejected{background:#d9534f}
+input,textarea,select{
+ width:100%;
+ padding:12px;
+ margin:6px 0 16px;
+ border-radius:12px;
+ border:1px solid #ccc;
+ font-family:Poppins;
+}
+</style>
+</head>
+
+<body>
+
+    <header>
+        <img src="logo.png" alt="logo">
+        <h1>LearnMate</h1>
+        <ul>
+            <a href="home.html"> <li>Home</li></a>
+            <a href="working.html">  <li>How It Works</li></a>
+            <a href="about.html"> <li>About</li></a>
+            <a href="buddies.html"> <li>Saved Buddies</li></a>
+            <a href="login.html"> <li><button>Login</button></li></a>
+            <a href="signup.html"> <li><button>Signup</button></li></a>        </ul>
+            <button onclick="logout()">Logout</button>
+    </header>
+
+<div class="container">
+
+<aside>
+<ul>
+<li class="active" onclick="showSection('connect',this)">Connect</li>
+<li onclick="showSection('requests',this)">Requests <span id="reqBadge" style="background:red;color:white;padding:2px 8px;border-radius:12px;font-size:12px;margin-left:6px;"></span></li>
+<li onclick="showSection('connections',this)">Connections</li>
+<li onclick="showSection('chats',this)">Chats</li>
+<li onclick="showSection('planner',this)">Study Planner</li>
+<li onclick="showSection('profile',this)">My Profile</li>
+</ul>
+</aside>
+
+<main>
+
+<section id="connect" class="section active">
+<h2>Available Buddies</h2>
+<div id="connectList"></div>
+</section>
+
+<section id="requests" class="section">
+<h2>Connection Requests</h2>
+<div id="requestList"></div>
+</section>
+
+<section id="connections" class="section">
+<h2>My Connections</h2>
+<div id="savedList"></div>
+</section>
+
+<section id="chats" class="section">
+<h2>Recent Chats</h2>
+<div id="chatList"></div>
+</section>
+
+<section id="planner" class="section">
+<h2>Study Planner</h2>
+
+<div class="card">
+<h3>Send Study Request</h3>
+<select id="sessUser"></select>
+<input id="sessTopic" placeholder="Topic">
+<input id="sessDate" type="date">
+<input id="sessTime" type="time">
+<button onclick="sendSession()">Send Request</button>
+</div>
+
+<div class="card">
+<h3>Sent Requests</h3>
+<table>
+<tr><th>User</th><th>Topic</th><th>Date</th><th>Time</th><th>Status</th></tr>
+<tbody id="sessionTable"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>Received Requests</h3>
+<table>
+<tr><th>From</th><th>Topic</th><th>Date</th><th>Time</th><th>Action</th></tr>
+<tbody id="receivedTable"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>Scheduled Timetable</h3>
+<table>
+<tr><th>With</th><th>Topic</th><th>Date</th><th>Time</th></tr>
+<tbody id="scheduleTable"></tbody>
+</table>
+</div>
+
+</section>
+
+<section id="profile" class="section">
+<h2>My Profile</h2>
+<div class="card">
+<img id="myImg" width="120" style="border-radius:22px"><br><br>
+<label>Upload Profile Image</label>
+<input type="file" accept="image/*" onchange="uploadImg(this)">
+<label>Name</label>
+<input id="myName">
+<label>Skills (comma separated)</label>
+<input id="mySkills">
+<label>Hobbies</label>
+<input id="myHobbies">
+<label>Goal</label>
+<textarea id="myAim"></textarea>
+<button onclick="saveProfile()">Save Profile</button>
+</div>
+</section>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
+<div class="card" style="max-width:420px;width:90%">
+<img id="vpImg" width="90" style="border-radius:20px"><br><br>
+<b id="vpName"></b>
+<div class="match" id="vpMatch"></div>
+<p><b>Skills:</b> <span id="vpSkills"></span></p>
+<p><b>Goal:</b> <span id="vpAim"></span></p>
+
+<h4>Chat</h4>
+<div class="chatBox" id="chatBox"></div>
+<input id="chatInput" placeholder="Type message...">
+<button onclick="sendChat()">Send</button>
+<br><br>
+<button onclick="closeProfile()">Close</button>
+</div>
+</div>
+
+<script>
+/* -------------------- SETUP -------------------- */
+const currentEmail=localStorage.getItem("currentUser");
+if(!currentEmail) location.href="login.html";
+let users=JSON.parse(localStorage.getItem("users"))||[];
+let me=users.find(u=>u.email===currentEmail);
+let connections=JSON.parse(localStorage.getItem(currentEmail+"_connections"))||[];
+let connReceived=JSON.parse(localStorage.getItem(currentEmail+"_conn_received"))||[];
+let sent=JSON.parse(localStorage.getItem(currentEmail+"_sent"))||[];
+let received=JSON.parse(localStorage.getItem(currentEmail+"_received"))||[];
+let activeChatUser=null;
+
+/* -------------------- NAVIGATION -------------------- */
+function showSection(id,el){
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('aside li').forEach(l=>l.classList.remove('active'));
+ el.classList.add('active');
+}
+
+/* -------------------- PROFILE IMAGE -------------------- */
+function uploadImg(input){
+ let file=input.files[0];
+ let reader=new FileReader();
+ reader.onload=e=>{
+  myImg.src=e.target.result;
+  me.img=e.target.result;
+ };
+ reader.readAsDataURL(file);
+}
+
+/* -------------------- SKILL MATCH -------------------- */
+function matchScore(a,b){
+ let x=(a||[]).map(s=>s.toLowerCase());
+ let y=(b||[]).map(s=>s.toLowerCase());
+ let common=x.filter(v=>y.includes(v));
+ return x.length?Math.round((common.length/Math.max(x.length,y.length))*100):0;
+}
+
+/* -------------------- CONNECT -------------------- */
+function renderConnect(){
+ connectList.innerHTML="";
+ users.filter(u=>u.email!==currentEmail && !connections.includes(u.email)).forEach(u=>{
+  let score=matchScore(me.skills,u.skills);
+  connectList.innerHTML+=`
+  <div class="card user">
+   <img src="${u.img||''}">
+   <div>
+    <b>${u.name||u.email}</b><br>
+    <small>${(u.skills||[]).join(", ")}</small>
+   </div>
+   <span class="match">${score}% match</span>
+   <button class="small" onclick="viewProfile('${u.email}')">View</button>
+   <button class="small" onclick="sendConnect('${u.email}')">Connect</button>
+  </div>`;
+ });
+}
+
+/* -------------------- REQUESTS -------------------- */
+function renderRequests(){
+ requestList.innerHTML="";
+ connReceived.forEach(e=>{
+  let u=users.find(x=>x.email===e);
+  requestList.innerHTML+=`
+  <div class="card user">
+   <img src="${u.img||''}">
+   <div>
+     <b>${u.name||e}</b><br>
+     <small>${(u.skills||[]).join(", ")}</small>
+   </div>
+   <button class="small" onclick="viewProfile('${e}')">View Profile</button>
+   <button class="small" onclick="acceptConn('${e}')">Accept</button>
+   <button class="small" onclick="rejectConn('${e}')">Reject</button>
+  </div>`;
+ });
+ if(!connReceived.length) requestList.innerHTML=`<div class="empty">No requests</div>`;
+ updateRequestBadge();
+}
+
+function sendConnect(email){
+ let r=JSON.parse(localStorage.getItem(email+"_conn_received"))||[];
+ if(!r.includes(currentEmail)) r.push(currentEmail);
+ localStorage.setItem(email+"_conn_received",JSON.stringify(r));
+ alert("Request sent");
+ renderAll();
+}
+function acceptConn(email) {
+  // add to my connections
+  if (!connections.includes(email)) connections.push(email);
+  localStorage.setItem(currentEmail + "_connections", JSON.stringify(connections));
+
+  // add me to their connections
+  let otherConnections = JSON.parse(localStorage.getItem(email + "_connections")) || [];
+  if (!otherConnections.includes(currentEmail)) otherConnections.push(currentEmail);
+  localStorage.setItem(email + "_connections", JSON.stringify(otherConnections));
+
+  // remove request from my received list
+  connReceived = connReceived.filter(x => x !== email);
+  localStorage.setItem(currentEmail + "_conn_received", JSON.stringify(connReceived));
+
+  // remove request from sender's sent list (IMPORTANT)
+  let senderSent = JSON.parse(localStorage.getItem(email + "_sent_conn")) || [];
+  senderSent = senderSent.filter(x => x !== currentEmail);
+  localStorage.setItem(email + "_sent_conn", JSON.stringify(senderSent));
+
+  renderAll();
+}
+function rejectConn(email) {
+  connReceived = connReceived.filter(x => x !== email);
+  localStorage.setItem(currentEmail + "_conn_received", JSON.stringify(connReceived));
+
+  renderAll();
+}
+
+/* -------------------- REQUEST BADGE -------------------- */
+function updateRequestBadge(){
+ let pending=connReceived.length;
+ reqBadge.textContent = pending ? pending : '';
+}
+
+/* -------------------- CONNECTIONS -------------------- */
+function renderConnections(){
+ savedList.innerHTML="";
+ connections.forEach(e=>{
+  savedList.innerHTML+=`
+  <div class="card user">
+   <b>${e}</b>
+   <button class="small" onclick="viewProfile('${e}')">Chat / View</button>
+  </div>`;
+ });
+}
+
+/* -------------------- PROFILE MODAL + CHAT -------------------- */
+function viewProfile(email){
+ let u=users.find(x=>x.email===email);
+ activeChatUser=email;
+ vpImg.src=u.img||"";
+ vpName.textContent=u.name||email;
+ vpSkills.textContent=(u.skills||[]).join(", ");
+ vpAim.textContent=u.aim||"";
+ vpMatch.textContent=matchScore(me.skills,u.skills)+"% match";
+ loadChat();
+ profileModal.style.display="flex";
+}
+
+function closeProfile(){
+ profileModal.style.display="none";
+ activeChatUser=null;
+ chatInput.value="";
+}
+
+function loadChat(){
+ let key=[currentEmail,activeChatUser].sort().join("_")+"_chat";
+ let chat=JSON.parse(localStorage.getItem(key))||[];
+ chatBox.innerHTML="";
+ chat.forEach(m=>{
+  chatBox.innerHTML+=`<div class="msg ${m.from===currentEmail?'me':'them'}"><span>${m.text}</span></div>`;
+ });
+ chatBox.scrollTop=chatBox.scrollHeight;
+}
+
+function sendChat(){
+ if(!chatInput.value || !activeChatUser) return;
+ let key=[currentEmail,activeChatUser].sort().join("_")+"_chat";
+ let chat=JSON.parse(localStorage.getItem(key))||[];
+ chat.push({from:currentEmail,text:chatInput.value});
+ localStorage.setItem(key,JSON.stringify(chat));
+ chatInput.value="";
+ loadChat();
+ renderChats();
+}
+
+/* -------------------- PROFILE -------------------- */
+function loadProfile(){
+ myImg.src=me.img||"";
+ myName.value=me.name||"";
+ mySkills.value=(me.skills||[]).join(",");
+ myHobbies.value=(me.hobbies||[]).join(",");
+ myAim.value=me.aim||"";
+}
+
+function saveProfile(){
+ me.name=myName.value;
+ me.skills=mySkills.value.split(",").map(x=>x.trim());
+ me.hobbies=myHobbies.value.split(",").map(x=>x.trim());
+ me.aim=myAim.value;
+ users[users.findIndex(u=>u.email===me.email)]=me;
+ localStorage.setItem("users",JSON.stringify(users));
+ alert("Profile Updated");
+ renderAll();
+ loadPlannerUsers();
+ renderPlanner();
+ renderChats();
+}
+
+/* -------------------- STUDY PLANNER -------------------- */
+function loadPlannerUsers(){
+  sessUser.innerHTML="<option value=''>Select user</option>";
+  connections.forEach(e=>sessUser.innerHTML+=`<option>${e}</option>`);
+}
+
+function sendSession(){
+  let to=sessUser.value;
+  let topic=sessTopic.value.trim();
+  let date=sessDate.value;
+  let time=sessTime.value;
+  if(!to || !topic || !date || !time) return alert("Please fill all fields.");
+  let exists=sent.some(s=>s.to===to && s.date===date && s.time===time);
+  if(exists) return alert("You already sent a request to this user at this date/time.");
+  let req={id:Date.now(), from:currentEmail, to, topic, date, time, status:"Pending"};
+  sent.push(req);
+  localStorage.setItem(currentEmail+"_sent",JSON.stringify(sent));
+  let r=JSON.parse(localStorage.getItem(to+"_received"))||[];
+  r.push(req);
+  localStorage.setItem(to+"_received",JSON.stringify(r));
+  sessTopic.value=""; sessDate.value=""; sessTime.value="";
+  renderPlanner();
+  alert("Session request sent!");
+}
+
+function updateSession(id,action){
+  received=JSON.parse(localStorage.getItem(currentEmail+"_received"))||[];
+  let r=received.find(x=>x.id==id); if(!r) return;
+  r.status=action;
+  localStorage.setItem(currentEmail+"_received",JSON.stringify(received));
+  let s=JSON.parse(localStorage.getItem(r.from+"_sent"))||[];
+  let m=s.find(x=>x.id==id); if(m) m.status=action;
+  localStorage.setItem(r.from+"_sent",JSON.stringify(s));
+  renderPlanner();
+}
+
+function renderPlanner(){
+  sessionTable.innerHTML="";
+  if(sent.length===0) sessionTable.innerHTML=`<tr><td colspan="5" class="empty">No sent requests</td></tr>`;
+  sent.forEach(s=>{
+    sessionTable.innerHTML+=`
+      <tr>
+        <td>${s.to}</td>
+        <td>${s.topic}</td>
+        <td>${s.date}</td>
+        <td>${s.time}</td>
+        <td><span class="status ${s.status.toLowerCase()}">${s.status}</span></td>
+      </tr>`;
+  });
+  receivedTable.innerHTML="";
+  let receivedList=JSON.parse(localStorage.getItem(currentEmail+"_received"))||[];
+  if(receivedList.length===0) receivedTable.innerHTML=`<tr><td colspan="5" class="empty">No received requests</td></tr>`;
+  receivedList.forEach(r=>{
+    let action=r.status==="Pending"
+      ? `<button onclick="updateSession(${r.id},'Accepted')">Accept</button>
+         <button onclick="updateSession(${r.id},'Rejected')">Reject</button>`
+      : `<span class="status ${r.status.toLowerCase()}">${r.status}</span>`;
+    receivedTable.innerHTML+=`
+      <tr>
+        <td>${r.from}</td>
+        <td>${r.topic}</td>
+        <td>${r.date}</td>
+        <td>${r.time}</td>
+        <td>${action}</td>
+      </tr>`;
+  });
+  scheduleTable.innerHTML="";
+  let acceptedSessions=[...sent.filter(s=>s.status==="Accepted"), ...receivedList.filter(r=>r.status==="Accepted")];
+  if(acceptedSessions.length===0) scheduleTable.innerHTML=`<tr><td colspan="4" class="empty">No scheduled sessions</td></tr>`;
+  acceptedSessions.forEach(x=>{
+    let withWhom=x.from===currentEmail?x.to:x.from;
+    scheduleTable.innerHTML+=`
+      <tr>
+        <td>${withWhom}</td>
+        <td>${x.topic}</td>
+        <td>${x.date}</td>
+        <td>${x.time}</td>
+      </tr>`;
+  });
+}
+
+/* -------------------- CHATS -------------------- */
+function renderChats(){
+ chatList.innerHTML="";
+ Object.keys(localStorage).forEach(k=>{
+   if(k.endsWith("_chat")){
+     let usersInChat=k.split("_chat")[0].split("_");
+     let otherUser=usersInChat[0]===currentEmail?usersInChat[1]:usersInChat[0];
+     let u=users.find(x=>x.email===otherUser);
+     chatList.innerHTML+=`
+       <div class="card user">
+         <img src="${u.img||''}">
+         <div>
+           <b>${u.name||otherUser}</b><br>
+           <small>${(u.skills||[]).join(", ")}</small>
+         </div>
+         <button class="small" onclick="viewProfile('${otherUser}')">Open Chat</button>
+       </div>`;
+   }
+ });
+ if(!chatList.innerHTML) chatList.innerHTML=`<div class="empty">No chats yet</div>`;
+}
+
+/* -------------------- LOGOUT -------------------- */
+function logout(){
+ localStorage.removeItem("currentUser");
+ location.href="login.html";
+}
+
+/* -------------------- INITIAL LOAD -------------------- */
+loadProfile();
+renderConnect();
+renderRequests();
+renderConnections();
+loadPlannerUsers();
+renderPlanner();
+renderChats();
+
+function renderAll() {
+  renderConnect();
+  renderRequests();
+  renderConnections();
+  updateRequestBadge();
+}
+
+</script>
+
+</body>
+</html>
